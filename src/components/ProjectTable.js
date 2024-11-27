@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const ProjectTable = ({ projects, startIndex }) => {
+const ProjectTable = ({ projects }) => {
   return (
     <table>
       <thead>
@@ -12,7 +11,7 @@ const ProjectTable = ({ projects, startIndex }) => {
         </tr>
       </thead>
       <tbody>
-        {projects.map((project, index) => {
+        {projects?.map((project, index) => {
           return (
             <tr key={project.id || index}>
               <td>{project['s.no']}</td>
@@ -25,10 +24,4 @@ const ProjectTable = ({ projects, startIndex }) => {
     </table>
   );
 };
-
-ProjectTable.propTypes = {
-  projects: PropTypes.array.isRequired,
-  startIndex: PropTypes.number.isRequired,
-};
-
 export default ProjectTable;

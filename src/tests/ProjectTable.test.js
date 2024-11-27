@@ -7,7 +7,7 @@ test('renders table with correct data', () => {
     { pledged: 20000, goal: 15000 },
   ];
 
-  render(<ProjectTable projects={mockProjects} startIndex={0} />);
+  render(<ProjectTable projects={mockProjects}/>);
 
   expect(screen.getByText('50%')).toBeInTheDocument();
   expect(screen.getByText('$5,000')).toBeInTheDocument();
