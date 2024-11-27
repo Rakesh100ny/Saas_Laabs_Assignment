@@ -1,25 +1,50 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import ProjectTable from './components/ProjectTable';
+import Pagination from './components/Pagination';
 import './App.css';
 
-function App() {
+const API_URL = 'https://raw.githubusercontent.com/saaslabsco/frontend-assignment/refs/heads/master/frontend-assignment.json';
+
+const App = () => {
+  const [projects, setProjects] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 5;
+
+  // Fetch data on mount
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error('Failed to fetch projects');
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Pagination logic
+  const totalPages = Math.ceil(projects.length / recordsPerPage);
+  const paginatedProjects = projects.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Kickstarter Projects</h1>
+      <ProjectTable projects={paginatedProjects} startIndex={(currentPage - 1) * recordsPerPage} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        onNext={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+      />
     </div>
   );
-}
+};
 
 export default App;
